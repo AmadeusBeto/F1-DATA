@@ -1,0 +1,63 @@
+/*Fondo general y tipografía */
+body {
+    background-color: #ebf0f0;
+    color: #0fb5e7;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+/* Títulos */
+h1, h2, h3 {
+    color: #3abdd4; /* rojo Ferrari / F1 */
+    text-shadow: 1px 1px 2px rgb(42, 243, 250);
+}
+
+/* Dropdown */
+.Select-control {
+    background-color: #ebe5e5;
+    border: 1px solid #f8eeee;
+    color: #0bada5;
+}
+
+.Select-menu-outer {
+    background-color: #ebe6e6;
+    color: #0bada5;
+}
+
+.Select-value-label {
+    color: #0bada5 !important;
+}
+
+/* Tabla */
+.dash-table-container .dash-table {
+    background-color: #e6dede;
+    color: #f1f1f1;
+    border: 1px solid #333;
+}
+
+.dash-table-container .dash-table th {
+    background-color: #e9e3e3;
+    color: #e10600;
+    font-weight: bold;
+}
+
+.dash-table-container .dash-table td {
+    border: 1px solid #333;
+}
+
+/* Hover sobre filas */
+.dash-table-container .dash-table tr:hover td {
+    background-color: #f3ebeb;
+}
+
+/* Gráfica Plotly */
+.js-plotly-plot .plotly {
+    background-color: #eee8e8 !important;
+}
+
+/* Centrado de contenido general */
+html, body, .app-container {
+    text-align: center;
+    padding: 20px;
+}

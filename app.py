@@ -1,12 +1,11 @@
 import dash
 from dash import dcc, html
 import plotly.express as px
+from dash import dash_table
 import pandas as pd
 
-# Cargar datos desde los archivos CSV
 circuitos_df = pd.read_csv('data/circuitos.csv')
 
-# Iniciar la aplicación Dash
 app = dash.Dash(__name__)
 
 # Diseño de la interfaz
@@ -20,6 +19,16 @@ app.layout = html.Div([
     ),
     html.Div(id='info-circuito', style={'text-align': 'center'}),
     dcc.Graph(id='mapa-circuitos'),
+    html.H2("Tabla de Circuitos", style={'text-align': 'center'}),
+    dash_table.DataTable(
+        id='tabla-circuitos',
+        columns=[{"name": i, "id": i} for i in circuitos_df.columns],
+        data=circuitos_df.to_dict('records'),
+        style_table={'overflowX': 'auto', 'margin': 'auto', 'width': '90%'},
+        style_cell={'textAlign': 'center'},
+        page_size=10,  # Número de filas por página
+    ),
+
 ])
 
 # Callback para actualizar la información y mapa
