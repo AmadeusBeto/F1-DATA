@@ -8,30 +8,58 @@ circuitos_df = pd.read_csv('data/circuitos.csv')
 
 app = dash.Dash(__name__)
 
-# Diseño de la interfaz
 app.layout = html.Div([
     html.H1("Circuitos de Fórmula 1", style={'text-align': 'center'}),
+
     dcc.Dropdown(
         id='circuito-dropdown',
         options=[{'label': circuito, 'value': circuito} for circuito in circuitos_df['Circuito']],
-        value=circuitos_df['Circuito'][0],  # Valor por defecto
+        value=circuitos_df['Circuito'][0],
         style={'width': '50%', 'margin': 'auto'}
     ),
-    html.Div(id='info-circuito', style={'text-align': 'center'}),
-    dcc.Graph(id='mapa-circuitos'),
-    html.H2("Tabla de Circuitos", style={'text-align': 'center'}),
-    dash_table.DataTable(
-        id='tabla-circuitos',
-        columns=[{"name": i, "id": i} for i in circuitos_df.columns],
-        data=circuitos_df.to_dict('records'),
-        style_table={'overflowX': 'auto', 'margin': 'auto', 'width': '90%'},
-        style_cell={'textAlign': 'center'},
-        page_size=10,  # Número de filas por página
-    ),
 
+    html.Div(id='info-circuito', style={'text-align': 'center', 'margin-top': '20px'}),
+
+    html.Div([
+        html.Div([
+            dcc.Graph(id='mapa-circuitos')
+        ], style={'width': '40%', 'display': 'inline-block', 'verticalAlign': 'top', 'padding': '10px'}),
+
+        html.Div([
+            html.H2("Tabla de Circuitos", style={'text-align': 'center'}),
+            dash_table.DataTable(
+                id='tabla-circuitos',
+                columns=[{"name": i, "id": i} for i in circuitos_df.columns],
+                data=circuitos_df.to_dict('records'),
+                style_table={'overflowX': 'auto'},
+                style_cell={'textAlign': 'center'},
+                page_size=10,
+            )
+        ], style={'width': '38%', 'display': 'inline-block', 'verticalAlign': 'top', 'padding': '10px'})
+    ], style={'display': 'flex', 'justifyContent': 'space-between'}),
+
+    html.H3("Ordenar por:", style={'text-align': 'center', 'margin-top': '30px'}),
+    dcc.Dropdown(
+        id='ordenar-por-dropdown',
+        options=[
+            {'label': 'Longitud', 'value': 'Longitud'},
+            {'label': 'Vueltas', 'value': 'Vueltas'},
+            {'label': 'Curvas', 'value': 'Curvas'}
+        ],
+        value='Longitud',
+        style={'width': '30%', 'margin': 'auto'}
+    ),
 ])
 
-# Callback para actualizar la información y mapa
+
+@app.callback(
+    dash.dependencies.Output('tabla-circuitos', 'data'),
+    dash.dependencies.Input('ordenar-por-dropdown', 'value')
+)
+def actualizar_tabla(ordenar_por):
+    df_ordenado = circuitos_df.sort_values(by=ordenar_por, ascending=False)
+    return df_ordenado.to_dict('records')
+
 @app.callback(
     [dash.dependencies.Output('info-circuito', 'children'),
      dash.dependencies.Output('mapa-circuitos', 'figure')],
